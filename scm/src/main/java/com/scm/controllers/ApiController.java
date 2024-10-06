@@ -20,6 +20,6 @@ public class ApiController {
 
     @GetMapping("/contacts/{contactId}")
     public Contact getContact(@PathVariable String contactId) {
-        return contactService.getById(contactId);
+        return contactService.getContactById(contactId);
     }
 }

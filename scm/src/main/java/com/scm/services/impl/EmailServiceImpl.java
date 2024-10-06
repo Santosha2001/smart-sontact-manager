@@ -12,9 +12,8 @@ import com.scm.services.EmailService;
 public class EmailServiceImpl implements EmailService {
 
     @Autowired
-    private JavaMailSender eMailSender;
+    private JavaMailSender mailSender;
 
-    // @Value("${spring.mail.properties.mail.domain_name}")
     @Value("${spring.mail.username}")
     private String domainName;
 
@@ -26,7 +25,7 @@ public class EmailServiceImpl implements EmailService {
         message.setSubject(subject);
         message.setText(body);
         message.setFrom(domainName);
-        eMailSender.send(message);
+        mailSender.send(message);
 
     }
 

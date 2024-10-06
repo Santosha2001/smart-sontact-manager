@@ -33,9 +33,6 @@ public class UserServiceImpl implements UserService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private Helper helper;
-
     @Override
     public User saveUser(User user) {
         // user id : have to generate
@@ -53,14 +50,14 @@ public class UserServiceImpl implements UserService {
         String emailToken = UUID.randomUUID().toString();
         user.setEmailToken(emailToken);
         User savedUser = userRepository.save(user);
-        String emailLink = helper.getLinkForEmailVerificatiton(emailToken);
+        String emailLink = Helper.getLinkForEmailVerificatiton(emailToken);
         emailService.sendEmail(savedUser.getEmail(), "Verify Account : Smart  Contact Manager", emailLink);
         return savedUser;
 
     }
 
     @Override
-    public Optional<User> getUserById(String id) {
+    public Optional<User> getUserByUserId(String id) {
         return userRepository.getUserById(id);
     }
 
@@ -88,7 +85,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(String id) {
+    public void deleteUserByUserId(String id) {
         User user2 = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         userRepository.delete(user2);
@@ -96,13 +93,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isUserExist(String userId) {
+    public boolean isUserExistByUserId(String userId) {
         User user2 = userRepository.findById(userId).orElse(null);
         return user2 != null ? true : false;
     }
 
     @Override
-    public boolean isUserExistByEmail(String email) {
+    public boolean isUserExistByUserEmail(String email) {
         User user = userRepository.findByEmail(email).orElse(null);
         return user != null ? true : false;
     }
@@ -113,7 +110,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByEmail(String email) {
+    public User getUserByUserEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
 
     }

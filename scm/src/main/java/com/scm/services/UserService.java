@@ -9,18 +9,18 @@ public interface UserService {
 
     User saveUser(User user);
 
-    Optional<User> getUserById(String id);
+    Optional<User> getUserByUserId(String id);
 
     Optional<User> updateUser(User user);
 
-    void deleteUser(String id);
+    void deleteUserByUserId(String id);
 
-    boolean isUserExist(String userId);
+    boolean isUserExistByUserId(String userId);
 
-    boolean isUserExistByEmail(String email);
+    boolean isUserExistByUserEmail(String email);
 
     List<User> getAllUsers();
 
-    User getUserByEmail(String email);
+    User getUserByUserEmail(String email);
 
 }

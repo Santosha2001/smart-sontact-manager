@@ -19,21 +19,25 @@ import com.scm.services.ContactService;
 public class ContactServiceImpl implements ContactService {
 
     @Autowired
-    private ContactRepository contactRepo;
+    private ContactRepository contactRepository;
 
+    /**
+     * Saves a new contact to the repository.
+     * 
+     * @param contact The contact object to be saved.
+     * @return The saved contact object with the generated ID.
+     */
     @Override
-    public Contact save(Contact contact) {
-
+    public Contact saveContact(Contact contact) {
         String contactId = UUID.randomUUID().toString();
         contact.setId(contactId);
-        return contactRepo.save(contact);
-
+        return contactRepository.save(contact);
     }
 
     @Override
-    public Contact update(Contact contact) {
+    public Contact updateContact(Contact contact) {
 
-        var contactOld = contactRepo.findById(contact.getId())
+        var contactOld = contactRepository.findById(contact.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Contact not found"));
         contactOld.setName(contact.getName());
         contactOld.setEmail(contact.getEmail());
@@ -46,68 +50,69 @@ public class ContactServiceImpl implements ContactService {
         contactOld.setLinkedInLink(contact.getLinkedInLink());
         contactOld.setCloudinaryImagePublicId(contact.getCloudinaryImagePublicId());
 
-        return contactRepo.save(contactOld);
+        return contactRepository.save(contactOld);
     }
 
     @Override
-    public List<Contact> getAll() {
-        return contactRepo.findAll();
+    public List<Contact> getAllContacts() {
+        return contactRepository.findAll();
     }
 
     @Override
-    public Contact getById(String id) {
-        return contactRepo.findById(id)
+    public Contact getContactById(String id) {
+        return contactRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Contact not found with given id " + id));
     }
 
     @Override
-    public void delete(String id) {
-        var contact = contactRepo.findById(id)
+    public void deleteContactById(String id) {
+        var contact = contactRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Contact not found with given id " + id));
-        contactRepo.delete(contact);
+        contactRepository.delete(contact);
 
     }
 
     @Override
-    public List<Contact> getByUserId(String userId) {
-        return contactRepo.findByUserId(userId);
+    public List<Contact> getContactsByUserId(String userId) {
+        return contactRepository.findByUserId(userId);
 
     }
 
     @Override
-    public Page<Contact> getByUser(User user, int page, int size, String sortBy, String direction) {
+    public Page<Contact> getContactByUser(User user, int page, int size, String sortBy, String direction) {
 
         Sort sort = direction.equals("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
 
         var pageable = PageRequest.of(page, size, sort);
 
-        return contactRepo.findByUser(user, pageable);
+        return contactRepository.findByUser(user, pageable);
 
     }
 
     @Override
-    public Page<Contact> searchByName(String nameKeyword, int size, int page, String sortBy, String order, User user) {
+    public Page<Contact> searchContactByName(String nameKeyword, int size, int page, String sortBy, String order,
+            User user) {
 
         Sort sort = order.equals("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         var pageable = PageRequest.of(page, size, sort);
-        return contactRepo.findByUserAndNameContaining(user, nameKeyword, pageable);
+        return contactRepository.findByUserAndNameContaining(user, nameKeyword, pageable);
     }
 
     @Override
-    public Page<Contact> searchByEmail(String emailKeyword, int size, int page, String sortBy, String order,
+    public Page<Contact> searchContactByEmail(String emailKeyword, int size, int page, String sortBy, String order,
             User user) {
         Sort sort = order.equals("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         var pageable = PageRequest.of(page, size, sort);
-        return contactRepo.findByUserAndEmailContaining(user, emailKeyword, pageable);
+        return contactRepository.findByUserAndEmailContaining(user, emailKeyword, pageable);
     }
 
     @Override
-    public Page<Contact> searchByPhoneNumber(String phoneNumberKeyword, int size, int page, String sortBy,
+    public Page<Contact> searchContactByPhoneNumber(String phoneNumberKeyword, int size, int page, String sortBy,
             String order, User user) {
 
         Sort sort = order.equals("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         var pageable = PageRequest.of(page, size, sort);
-        return contactRepo.findByUserAndPhoneNumberContaining(user, phoneNumberKeyword, pageable);
+        return contactRepository.findByUserAndPhoneNumberContaining(user, phoneNumberKeyword, pageable);
     }
 
 }

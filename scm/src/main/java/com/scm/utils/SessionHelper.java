@@ -17,7 +17,6 @@ public class SessionHelper {
             session.removeAttribute("message");
         } catch (Exception e) {
             System.out.println("Error in SessionHelper: " + e);
-            ;
             e.printStackTrace();
         }
 

@@ -78,7 +78,7 @@ public class ContactController {
         String username = Helper.getEmailOfLoggedInUser(authentication);
         // form ---> contact
 
-        User user = userService.getUserByEmail(username);
+        User user = userService.getUserByUserEmail(username);
         // 2 process the contact picture
 
         // image process
@@ -102,7 +102,7 @@ public class ContactController {
             contact.setCloudinaryImagePublicId(filename);
 
         }
-        contactService.save(contact);
+        contactService.saveContact(contact);
         System.out.println(contactForm);
 
         // 3 set the contact picture url
@@ -132,9 +132,9 @@ public class ContactController {
         // load all the user contacts
         String username = Helper.getEmailOfLoggedInUser(authentication);
 
-        User user = userService.getUserByEmail(username);
+        User user = userService.getUserByUserEmail(username);
 
-        Page<Contact> pageContact = contactService.getByUser(user, page, size, sortBy, direction);
+        Page<Contact> pageContact = contactService.getContactByUser(user, page, size, sortBy, direction);
 
         model.addAttribute("pageContact", pageContact);
         model.addAttribute("pageSize", ScmAppConstants.PAGE_SIZE);
@@ -159,17 +159,19 @@ public class ContactController {
 
         logger.info("field {} keyword {}", contactSearchForm.getField(), contactSearchForm.getValue());
 
-        var user = userService.getUserByEmail(Helper.getEmailOfLoggedInUser(authentication));
+        var user = userService.getUserByUserEmail(Helper.getEmailOfLoggedInUser(authentication));
 
         Page<Contact> pageContact = null;
         if (contactSearchForm.getField().equalsIgnoreCase("name")) {
-            pageContact = contactService.searchByName(contactSearchForm.getValue(), size, page, sortBy, direction,
+            pageContact = contactService.searchContactByName(contactSearchForm.getValue(), size, page, sortBy,
+                    direction,
                     user);
         } else if (contactSearchForm.getField().equalsIgnoreCase("email")) {
-            pageContact = contactService.searchByEmail(contactSearchForm.getValue(), size, page, sortBy, direction,
+            pageContact = contactService.searchContactByEmail(contactSearchForm.getValue(), size, page, sortBy,
+                    direction,
                     user);
         } else if (contactSearchForm.getField().equalsIgnoreCase("phone")) {
-            pageContact = contactService.searchByPhoneNumber(contactSearchForm.getValue(), size, page, sortBy,
+            pageContact = contactService.searchContactByPhoneNumber(contactSearchForm.getValue(), size, page, sortBy,
                     direction, user);
         }
 
@@ -189,7 +191,7 @@ public class ContactController {
     public String deleteContact(
             @PathVariable("contactId") String contactId,
             HttpSession session) {
-        contactService.delete(contactId);
+        contactService.deleteContactById(contactId);
         logger.info("contactId {} deleted", contactId);
 
         session.setAttribute("message",
@@ -209,7 +211,7 @@ public class ContactController {
             @PathVariable("contactId") String contactId,
             Model model) {
 
-        var contact = contactService.getById(contactId);
+        var contact = contactService.getContactById(contactId);
         ContactForm contactForm = new ContactForm();
         contactForm.setName(contact.getName());
         contactForm.setEmail(contact.getEmail());
@@ -238,7 +240,7 @@ public class ContactController {
             return "user/update_contact_view";
         }
 
-        var con = contactService.getById(contactId);
+        var con = contactService.getContactById(contactId);
         con.setId(contactId);
         con.setName(contactForm.getName());
         con.setEmail(contactForm.getEmail());
@@ -263,7 +265,7 @@ public class ContactController {
             logger.info("file is empty");
         }
 
-        var updateCon = contactService.update(con);
+        var updateCon = contactService.updateContact(con);
         logger.info("updated contact {}", updateCon);
 
         model.addAttribute("message", Message.builder().content("Contact Updated !!").type(MessageType.green).build());
