@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -15,10 +17,6 @@ import com.scm.utils.MessageType;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class PageController {
@@ -34,23 +32,14 @@ public class PageController {
     @RequestMapping("/home")
     public String home(Model model) {
         System.out.println("Home page handler");
-        // sending data to view
-        model.addAttribute("name", "Substring Technologies");
-        model.addAttribute("youtubeChannel", "Learn Code With Durgesh");
-        model.addAttribute("githubRepo", "https://github.com/learncodewithdurgesh/");
         return "index";
     }
 
-    // about route
-
     @RequestMapping("/about")
     public String aboutPage(Model model) {
-        model.addAttribute("isLogin", true);
         System.out.println("About page loading");
         return "about";
     }
-
-    // services
 
     @RequestMapping("/services")
     public String servicesPage() {
@@ -76,11 +65,7 @@ public class PageController {
     public String register(Model model) {
 
         UserForm userForm = new UserForm();
-        // default data bhi daal sakte hai
-        // userForm.setName("Durgesh");
-        // userForm.setAbout("This is about : Write something about yourself");
         model.addAttribute("userForm", userForm);
-
         return "register";
     }
 
@@ -99,23 +84,6 @@ public class PageController {
             return "register";
         }
 
-        // TODO::Validate userForm[Next Video]
-
-        // save to database
-
-        // userservice
-
-        // UserForm--> User
-        // User user = User.builder()
-        // .name(userForm.getName())
-        // .email(userForm.getEmail())
-        // .password(userForm.getPassword())
-        // .about(userForm.getAbout())
-        // .phoneNumber(userForm.getPhoneNumber())
-        // .profilePic(
-        // "https://www.learncodewithdurgesh.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fdurgesh_sir.35c6cb78.webp&w=1920&q=75")
-        // .build();
-
         User user = new User();
         user.setName(userForm.getName());
         user.setEmail(userForm.getEmail());
@@ -123,22 +91,19 @@ public class PageController {
         user.setAbout(userForm.getAbout());
         user.setPhoneNumber(userForm.getPhoneNumber());
         user.setEnabled(false);
+        // user.setProfilePic(
+        // "https://www.learncodewithdurgesh.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fdurgesh_sir.35c6cb78.webp&w=1920&q=75");
         user.setProfilePic(
-                "https://www.learncodewithdurgesh.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fdurgesh_sir.35c6cb78.webp&w=1920&q=75");
+                "https://png.pngtree.com/element_our/20200610/ourmid/pngtree-character-default-avatar-image_2237203.jpg");
 
         User savedUser = userService.saveUser(user);
 
         System.out.println("user saved :");
 
-        // message = "Registration Successful"
-
-        // add the message:
-
         Message message = Message.builder().content("Registration Successful").type(MessageType.green).build();
 
         session.setAttribute("message", message);
 
-        // redirectto login page
         return "redirect:/register";
     }
 

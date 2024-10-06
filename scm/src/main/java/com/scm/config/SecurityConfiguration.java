@@ -36,99 +36,16 @@ public class SecurityConfiguration {
         return daoAuthenticationProvider;
     }
 
-    // @Bean
-    // public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity)
-    // throws Exception {
-
-    // // configuration
-
-    // // urls configure kiay hai ki koun se public rangenge aur koun se private
-    // // rangenge
-    // httpSecurity.authorizeHttpRequests(authorize -> {
-    // // authorize.requestMatchers("/home", "/register", "/services").permitAll();
-    // authorize.requestMatchers("/user/**").authenticated();
-    // authorize.anyRequest().permitAll();
-    // });
-
-    // // form default login
-    // // agar hame kuch bhi change karna hua to hama yaha ayenge: form login se
-    // // related
-    // httpSecurity.formLogin(formLogin -> {
-
-    // //
-    // formLogin.loginPage("/login");
-    // formLogin.loginProcessingUrl("/authenticate");
-    // formLogin.successForwardUrl("/user/profile");
-    // // formLogin.failureForwardUrl("/login?error=true");
-    // // formLogin.defaultSuccessUrl("/home");
-    // formLogin.usernameParameter("email");
-    // formLogin.passwordParameter("password");
-
-    // // formLogin.failureHandler(new AuthenticationFailureHandler() {
-
-    // // @Override
-    // // public void onAuthenticationFailure(HttpServletRequest request,
-    // // HttpServletResponse response,
-    // // AuthenticationException exception) throws IOException, ServletException {
-    // // // TODO Auto-generated method stub
-    // // throw new UnsupportedOperationException("Unimplemented method
-    // // 'onAuthenticationFailure'");
-    // // }
-
-    // // });
-
-    // // formLogin.successHandler(new AuthenticationSuccessHandler() {
-
-    // // @Override
-    // // public void onAuthenticationSuccess(HttpServletRequest request,
-    // // HttpServletResponse response,
-    // // Authentication authentication) throws IOException, ServletException {
-    // // // TODO Auto-generated method stub
-    // // throw new UnsupportedOperationException("Unimplemented method
-    // // 'onAuthenticationSuccess'");
-    // // }
-
-    // // });
-    // formLogin.failureHandler(authFailtureHandler);
-
-    // });
-
-    // httpSecurity.csrf(AbstractHttpConfigurer::disable);
-    // // oauth configurations
-
-    // httpSecurity.oauth2Login(oauth -> {
-    // oauth.loginPage("/login");
-    // oauth.successHandler(handler);
-    // });
-
-    // httpSecurity.logout(logoutForm -> {
-    // logoutForm.logoutUrl("/do-logout");
-    // logoutForm.logoutSuccessUrl("/login?logout=true");
-    // });
-
-    // return httpSecurity.build();
-
-    // }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
-        // configuration
-
-        // urls configure kiay hai ki koun se public rangenge aur koun se private
-        // rangenge
         httpSecurity.authorizeHttpRequests(authorize -> {
-            // authorize.requestMatchers("/home", "/register", "/services").permitAll();
             authorize.requestMatchers("/user/**").authenticated();
             authorize.anyRequest().permitAll();
         });
 
-        // form default login
-        // agar hame kuch bhi change karna hua to hama yaha ayenge: form login se
-        // related
         httpSecurity.formLogin(formLogin -> {
 
-            //
             formLogin.loginPage("/login");
             formLogin.loginProcessingUrl("/authenticate");
             formLogin.successForwardUrl("/user/profile");
@@ -137,38 +54,13 @@ public class SecurityConfiguration {
             formLogin.usernameParameter("email");
             formLogin.passwordParameter("password");
 
-            // formLogin.failureHandler(new AuthenticationFailureHandler() {
-
-            // @Override
-            // public void onAuthenticationFailure(HttpServletRequest request,
-            // HttpServletResponse response,
-            // AuthenticationException exception) throws IOException, ServletException {
-            // // TODO Auto-generated method stub
-            // throw new UnsupportedOperationException("Unimplemented method
-            // 'onAuthenticationFailure'");
-            // }
-
-            // });
-
-            // formLogin.successHandler(new AuthenticationSuccessHandler() {
-
-            // @Override
-            // public void onAuthenticationSuccess(HttpServletRequest request,
-            // HttpServletResponse response,
-            // Authentication authentication) throws IOException, ServletException {
-            // // TODO Auto-generated method stub
-            // throw new UnsupportedOperationException("Unimplemented method
-            // 'onAuthenticationSuccess'");
-            // }
-
-            // });
             formLogin.failureHandler(authFailtureHandler);
 
         });
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
-        // oauth configurations
 
+        // oauth configurations
         httpSecurity.oauth2Login(oauth -> {
             oauth.loginPage("/login");
             oauth.successHandler(handler);

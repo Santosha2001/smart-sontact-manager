@@ -30,9 +30,7 @@ public class RootController {
         logger.info("User logged in: {}", username);
         // database se data ko fetch : get user from db :
         User user = userService.getUserByUserEmail(username);
-        System.out.println(user);
-        System.out.println(user.getName());
-        System.out.println(user.getEmail());
+
         model.addAttribute("loggedInUser", user);
 
     }

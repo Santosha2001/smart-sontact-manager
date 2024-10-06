@@ -13,11 +13,10 @@ import com.scm.services.ContactService;
 @RequestMapping("/api")
 public class ApiController {
 
-    // get contact
-
     @Autowired
     private ContactService contactService;
 
+    // get contact
     @GetMapping("/contacts/{contactId}")
     public Contact getContact(@PathVariable String contactId) {
         return contactService.getContactById(contactId);

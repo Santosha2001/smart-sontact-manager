@@ -17,11 +17,10 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/auth")
 public class AuthController {
 
-    // verify email
-
     @Autowired
     private UserRepository userRepo;
 
+    // verify email
     @GetMapping("/verify-email")
     public String verifyEmail(
             @RequestParam("token") String token, HttpSession session) {
