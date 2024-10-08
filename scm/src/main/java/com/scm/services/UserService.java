@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import com.scm.entities.User;
+import com.scm.forms.UserForm;
 
 public interface UserService {
+
+    User convertUserFormToUser(UserForm userForm);
 
     User saveUser(User user);
 

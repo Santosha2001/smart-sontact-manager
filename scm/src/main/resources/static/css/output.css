@@ -755,6 +755,10 @@ video {
   margin-top: 2rem;
 }
 
+.mb-0 {
+  margin-bottom: 0px;
+}
+
 .block {
   display: block;
 }
@@ -932,6 +936,10 @@ video {
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.scroll-pb-0 {
+  scroll-padding-bottom: 0px;
 }
 
 .grid-cols-1 {
@@ -1327,6 +1335,22 @@ video {
 
 .pt-20 {
   padding-top: 5rem;
+}
+
+.pt-10 {
+  padding-top: 2.5rem;
+}
+
+.pb-5 {
+  padding-bottom: 1.25rem;
+}
+
+.pb-0 {
+  padding-bottom: 0px;
+}
+
+.pt-5 {
+  padding-top: 1.25rem;
 }
 
 .text-left {

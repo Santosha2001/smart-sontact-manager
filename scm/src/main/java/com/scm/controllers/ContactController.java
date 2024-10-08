@@ -120,7 +120,6 @@ public class ContactController {
     }
 
     // view contacts
-
     @RequestMapping
     public String viewContacts(
             @RequestParam(value = "page", defaultValue = "0") int page,

@@ -6,10 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.scm.entities.User;
-import com.scm.repositories.UserRepository;
-import com.scm.utils.Message;
-import com.scm.utils.MessageType;
+import com.scm.services.AuthService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -18,42 +15,30 @@ import jakarta.servlet.http.HttpSession;
 public class AuthController {
 
     @Autowired
-    private UserRepository userRepo;
+    private AuthService authService;
 
-    // verify email
+    /**
+     * Handles GET requests to verify a user's email using a token.
+     * This method delegates the email verification to the AuthService and sets the
+     * view
+     * name based on the verification result.
+     * 
+     * @param token   the verification token sent to the user's email
+     * @param session the current HTTP session to set messages
+     * @return the view name to display based on the verification result:
+     *         "success_page" if verification is successful,
+     *         otherwise "error_page"
+     */
     @GetMapping("/verify-email")
     public String verifyEmail(
             @RequestParam("token") String token, HttpSession session) {
 
-        User user = userRepo.findByEmailToken(token).orElse(null);
+        boolean isVerified = authService.verifyEmailToken(token, session);
 
-        if (user != null) {
-            // user fetch hua hai :: process karna hai
-
-            if (user.getEmailToken().equals(token)) {
-                user.setEmailVerified(true);
-                user.setEnabled(true);
-                userRepo.save(user);
-                session.setAttribute("message", Message.builder()
-                        .type(MessageType.green)
-                        .content("You email is verified. Now you can login  ")
-                        .build());
-                return "success_page";
-            }
-
-            session.setAttribute("message", Message.builder()
-                    .type(MessageType.red)
-                    .content("Email not verified ! Token is not associated with user .")
-                    .build());
+        if (isVerified) {
+            return "success_page";
+        } else {
             return "error_page";
-
         }
-
-        session.setAttribute("message", Message.builder()
-                .type(MessageType.red)
-                .content("Email not verified ! Token is not associated with user .")
-                .build());
-
-        return "error_page";
     }
 }

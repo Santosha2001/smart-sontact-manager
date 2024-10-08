@@ -16,7 +16,12 @@ public class ApiController {
     @Autowired
     private ContactService contactService;
 
-    // get contact
+    /**
+     * Handles GET requests to retrieve a contact by its ID.
+     * 
+     * @param contactId the ID of the contact to be retrieved
+     * @return the contact with the specified ID
+     */
     @GetMapping("/contacts/{contactId}")
     public Contact getContact(@PathVariable String contactId) {
         return contactService.getContactById(contactId);

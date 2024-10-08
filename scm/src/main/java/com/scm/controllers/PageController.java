@@ -6,8 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.scm.entities.User;
 import com.scm.forms.UserForm;
@@ -48,7 +48,6 @@ public class PageController {
     }
 
     // contact page
-
     @GetMapping("/contact")
     public String contact() {
         return new String("contact");
@@ -69,42 +68,34 @@ public class PageController {
         return "register";
     }
 
-    // processing register
-
-    @RequestMapping(value = "/do-register", method = RequestMethod.POST)
+    /**
+     * This method register's a new user:
+     * 1. Validates the user form data.
+     * 2. Converts the form data to a User object using the userService.
+     * 3. Saves the User object, which includes generating a user ID,
+     * encoding the password, setting default roles, and saving the user to the
+     * database.
+     * 4. Sets a success message in the session.
+     * 5. Redirects the user to the registration page upon successful registration.
+     *
+     * @param userForm       the form containing user details for registration
+     * @param rBindingResult the binding result for validation
+     * @param session        the HTTP session for storing messages
+     * @return the view name to redirect to
+     */
+    @PostMapping("/do-register")
     public String processRegister(@Valid @ModelAttribute UserForm userForm, BindingResult rBindingResult,
             HttpSession session) {
-        System.out.println("Processing registration");
-        // fetch form data
-        // UserForm
-        System.out.println(userForm);
 
-        // validate form data
         if (rBindingResult.hasErrors()) {
             return "register";
         }
-
-        User user = new User();
-        user.setName(userForm.getName());
-        user.setEmail(userForm.getEmail());
-        user.setPassword(userForm.getPassword());
-        user.setAbout(userForm.getAbout());
-        user.setPhoneNumber(userForm.getPhoneNumber());
-        user.setEnabled(false);
-        // user.setProfilePic(
-        // "https://www.learncodewithdurgesh.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fdurgesh_sir.35c6cb78.webp&w=1920&q=75");
-        user.setProfilePic(
-                "https://png.pngtree.com/element_our/20200610/ourmid/pngtree-character-default-avatar-image_2237203.jpg");
-
-        User savedUser = userService.saveUser(user);
-
-        System.out.println("user saved :");
+        User user = userService.convertUserFormToUser(userForm);
+        userService.saveUser(user);
 
         Message message = Message.builder().content("Registration Successful").type(MessageType.green).build();
-
         session.setAttribute("message", message);
 
         return "redirect:/register";
     }
-
 }

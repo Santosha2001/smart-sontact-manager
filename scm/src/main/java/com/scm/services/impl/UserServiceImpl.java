@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.scm.entities.User;
 import com.scm.exceptions.ResourceNotFoundException;
+import com.scm.forms.UserForm;
 import com.scm.repositories.UserRepository;
 import com.scm.services.EmailService;
 import com.scm.services.UserService;
@@ -32,6 +33,20 @@ public class UserServiceImpl implements UserService {
     private EmailService emailService;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Override
+    public User convertUserFormToUser(UserForm userForm) {
+        User user = new User();
+        user.setName(userForm.getName());
+        user.setEmail(userForm.getEmail());
+        user.setPassword(userForm.getPassword());
+        user.setAbout(userForm.getAbout());
+        user.setPhoneNumber(userForm.getPhoneNumber());
+        user.setEnabled(false);
+        user.setProfilePic(
+                "https://png.pngtree.com/element_our/20200610/ourmid/pngtree-character-default-avatar-image_2237203.jpg");
+        return user;
+    }
 
     @Override
     public User saveUser(User user) {
