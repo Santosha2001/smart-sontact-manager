@@ -32,4 +32,8 @@ public interface ContactService {
     List<Contact> getContactsByUserId(String userId);
 
     Page<Contact> getContactByUser(User user, int page, int size, String sortField, String sortDirection);
+
+    ContactForm prepareContactForm(String contactId);
+
+    void updateContactFromForm(String contactId, ContactForm contactForm);
 }

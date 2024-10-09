@@ -3,6 +3,7 @@ package com.scm.services.impl;
 import java.util.List;
 import java.util.UUID;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +30,8 @@ public class ContactServiceImpl implements ContactService {
 
     @Autowired
     private ContactRepository contactRepository;
+
+    private Logger logger = org.slf4j.LoggerFactory.getLogger(this.getClass());
 
     /**
      * Saves a new contact to the repository.
@@ -276,6 +279,72 @@ public class ContactServiceImpl implements ContactService {
         var pageable = PageRequest.of(page, size, sort);
 
         return contactRepository.findByUserAndPhoneNumberContaining(user, phoneNumberKeyword, pageable);
+    }
+
+    /**
+     * Prepares a ContactForm object for the specified contact ID.
+     * 
+     * This method retrieves the contact associated with the given ID,
+     * converts its details into a ContactForm object, and returns the ContactForm.
+     *
+     * @param contactId the ID of the contact to be converted into a ContactForm
+     * @return a ContactForm object containing the contact's details
+     */
+    @Override
+    public ContactForm prepareContactForm(String contactId) {
+        var contact = getContactById(contactId);
+
+        ContactForm contactForm = new ContactForm();
+        contactForm.setName(contact.getName());
+        contactForm.setEmail(contact.getEmail());
+        contactForm.setPhoneNumber(contact.getPhoneNumber());
+        contactForm.setAddress(contact.getAddress());
+        contactForm.setDescription(contact.getDescription());
+        contactForm.setFavorite(contact.isFavorite());
+        contactForm.setWebsiteLink(contact.getWebsiteLink());
+        contactForm.setLinkedInLink(contact.getLinkedInLink());
+        contactForm.setPicture(contact.getPicture());
+
+        return contactForm;
+    }
+
+    /**
+     * Updates an existing contact with information from a ContactForm.
+     * 
+     * This method performs the following tasks:
+     * 1. Retrieves the existing contact by its ID.
+     * 2. Updates the contact's fields with the information from the ContactForm.
+     * 3. Processes and uploads a new contact image if provided.
+     * 4. Saves the updated contact back to the repository.
+     *
+     * @param contactId   the ID of the contact to be updated
+     * @param contactForm the form containing updated contact details
+     */
+    @Override
+    public void updateContactFromForm(String contactId, ContactForm contactForm) {
+        // Get existing contact
+        var contact = getContactById(contactId);
+        contact.setName(contactForm.getName());
+        contact.setEmail(contactForm.getEmail());
+        contact.setPhoneNumber(contactForm.getPhoneNumber());
+        contact.setAddress(contactForm.getAddress());
+        contact.setDescription(contactForm.getDescription());
+        contact.setFavorite(contactForm.isFavorite());
+        contact.setWebsiteLink(contactForm.getWebsiteLink());
+        contact.setLinkedInLink(contactForm.getLinkedInLink());
+
+        // Process image
+        if (contactForm.getContactImage() != null && !contactForm.getContactImage().isEmpty()) {
+            logger.info("file is not empty");
+            String fileName = UUID.randomUUID().toString();
+            String imageUrl = imageService.uploadImage(contactForm.getContactImage(), fileName);
+            contact.setCloudinaryImagePublicId(fileName);
+            contact.setPicture(imageUrl);
+        } else {
+            logger.info("file is empty");
+        }
+
+        updateContact(contact);
     }
 
 }
