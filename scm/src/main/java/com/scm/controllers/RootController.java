@@ -14,11 +14,36 @@ import com.scm.utils.Helper;
 @ControllerAdvice
 public class RootController {
 
+    /**
+     * @ControllerAdvice is a specialized component in Spring that allows for
+     *                   global exception handling, model attributes handling, and
+     *                   data binding
+     *                   across multiple controllers. It helps separate
+     *                   error-handling logic from
+     *                   the controller logic, promoting cleaner code and better
+     *                   separation of concerns.
+     */
+
     private Logger logger = org.slf4j.LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private UserService userService;
 
+    /**
+     * Adds logged-in user information to the model for the current request.
+     * 
+     * This method performs the following tasks:
+     * 1. Checks if the authentication object is null; if so, it returns
+     * immediately.
+     * 2. Retrieves the email of the logged-in user from the authentication object.
+     * 3. Logs the username of the logged-in user.
+     * 4. Fetches the user data from the database using the retrieved email.
+     * 5. Adds the retrieved user information to the model.
+     *
+     * @param model          the model to which the user information will be added
+     * @param authentication the authentication object containing the user's
+     *                       authentication information
+     */
     @ModelAttribute
     public void addLoggedInUserInformation(Model model, Authentication authentication) {
         if (authentication == null) {
@@ -28,7 +53,7 @@ public class RootController {
 
         String username = Helper.getEmailOfLoggedInUser(authentication);
         logger.info("User logged in: {}", username);
-        // database se data ko fetch : get user from db :
+
         User user = userService.getUserByUserEmail(username);
 
         model.addAttribute("loggedInUser", user);

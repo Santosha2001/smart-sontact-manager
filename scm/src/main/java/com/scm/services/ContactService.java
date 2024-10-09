@@ -6,8 +6,11 @@ import org.springframework.data.domain.Page;
 
 import com.scm.entities.Contact;
 import com.scm.entities.User;
+import com.scm.forms.ContactForm;
 
 public interface ContactService {
+
+    void processAndSaveContact(ContactForm contactForm, String username);
 
     Contact saveContact(Contact contact);
 
