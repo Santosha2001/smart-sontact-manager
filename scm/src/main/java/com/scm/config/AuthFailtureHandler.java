@@ -18,6 +18,19 @@ import jakarta.servlet.http.HttpSession;
 @Component
 public class AuthFailtureHandler implements AuthenticationFailureHandler {
 
+    /**
+     * Handles authentication failure events.
+     * This method is invoked when authentication fails, either because the user is
+     * disabled or for other reasons.
+     * It sets an appropriate message in the session based on the type of failure
+     * and redirects the user accordingly.
+     * 
+     * @param request   the HttpServletRequest object
+     * @param response  the HttpServletResponse object
+     * @param exception the exception that caused the authentication failure
+     * @throws IOException      if an input or output error occurs
+     * @throws ServletException if a servlet-specific error occurs
+     */
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException exception) throws IOException, ServletException {

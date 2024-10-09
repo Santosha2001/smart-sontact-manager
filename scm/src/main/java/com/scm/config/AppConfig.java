@@ -22,6 +22,16 @@ public class AppConfig {
     @Value("${cloudinary.secure}")
     private boolean secure;
 
+    /**
+     * Configures and returns a Cloudinary instance.
+     *
+     * This method initializes and configures the Cloudinary object with the
+     * necessary
+     * credentials and settings required to interact with the Cloudinary API.
+     *
+     * @return a configured Cloudinary instance
+     */
+
     @Bean
     public Cloudinary cloudinary() {
 

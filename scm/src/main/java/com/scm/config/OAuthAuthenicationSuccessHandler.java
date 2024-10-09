@@ -31,6 +31,23 @@ public class OAuthAuthenicationSuccessHandler implements AuthenticationSuccessHa
     @Autowired
     private UserRepository userRepo;
 
+    /**
+     * Handles successful OAuth2 authentication.
+     * 
+     * This method processes OAuth2 authentication success by identifying the
+     * provider,
+     * extracting user information from the OAuth2 token, creating a User entity,
+     * and
+     * saving it to the repository if the user is new. It also redirects the user to
+     * their profile page upon successful authentication.
+     * 
+     * @param request        the HttpServletRequest object
+     * @param response       the HttpServletResponse object
+     * @param authentication the Authentication object containing the user's
+     *                       authentication information
+     * @throws IOException      if an input or output error occurs
+     * @throws ServletException if a servlet-specific error occurs
+     */
     @Override
     public void onAuthenticationSuccess(
             HttpServletRequest request,
@@ -40,15 +57,12 @@ public class OAuthAuthenicationSuccessHandler implements AuthenticationSuccessHa
         logger.info("OAuthAuthenicationSuccessHandler");
 
         // identify the provider
-
         var oauth2AuthenicationToken = (OAuth2AuthenticationToken) authentication;
-
         String authorizedClientRegistrationId = oauth2AuthenicationToken.getAuthorizedClientRegistrationId();
 
         logger.info(authorizedClientRegistrationId);
 
         var oauthUser = (DefaultOAuth2User) authentication.getPrincipal();
-
         oauthUser.getAttributes().forEach((key, value) -> {
             logger.info(key + " : " + value);
         });
@@ -62,9 +76,7 @@ public class OAuthAuthenicationSuccessHandler implements AuthenticationSuccessHa
 
         if (authorizedClientRegistrationId.equalsIgnoreCase("google")) {
 
-            // google
             // google attributes
-
             user.setEmail(oauthUser.getAttribute("email").toString());
             user.setProfilePic(oauthUser.getAttribute("picture").toString());
             user.setName(oauthUser.getAttribute("name").toString());
@@ -74,7 +86,6 @@ public class OAuthAuthenicationSuccessHandler implements AuthenticationSuccessHa
 
         } else if (authorizedClientRegistrationId.equalsIgnoreCase("github")) {
 
-            // github
             // github attributes
             String email = oauthUser.getAttribute("email") != null ? oauthUser.getAttribute("email").toString()
                     : oauthUser.getAttribute("login").toString() + "@gmail.com";

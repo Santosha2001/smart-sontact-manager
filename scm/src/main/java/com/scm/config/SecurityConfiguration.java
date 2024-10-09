@@ -22,11 +22,41 @@ public class SecurityConfiguration {
     @Autowired
     private AuthFailtureHandler authFailtureHandler;
 
+    /**
+     * Configures and returns a PasswordEncoder bean.
+     * 
+     * This method initializes and configures a BCryptPasswordEncoder,
+     * which is used for hashing passwords. BCrypt is a strong hashing
+     * algorithm designed to ensure passwords are stored securely.
+     * 
+     * @return a configured BCryptPasswordEncoder instance
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Configures and returns a DaoAuthenticationProvider bean.
+     *
+     * This method sets up a DaoAuthenticationProvider with the custom
+     * UserDetailsService
+     * implementation and password encoder. This configuration is essential for
+     * managing authentication using DAO-based user details and password encoding.
+     *
+     * @return a configured DaoAuthenticationProvider instance
+     */
+
+    /**
+     * Configures and returns a DaoAuthenticationProvider bean.
+     * 
+     * This method sets up a DaoAuthenticationProvider with a custom
+     * UserDetailsService
+     * implementation and a password encoder. This configuration is essential for
+     * managing authentication using DAO-based user details and password encoding.
+     * 
+     * @return a configured DaoAuthenticationProvider instance
+     */
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -36,6 +66,19 @@ public class SecurityConfiguration {
         return daoAuthenticationProvider;
     }
 
+    /**
+     * Configures and returns a SecurityFilterChain bean.
+     * 
+     * This method sets up the security configurations for the application,
+     * including
+     * request authorization, form-based login, CSRF protection, OAuth2 login, and
+     * logout
+     * configurations.
+     * 
+     * @param httpSecurity the HttpSecurity object to configure
+     * @return a configured SecurityFilterChain instance
+     * @throws Exception if an error occurs during configuration
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
@@ -55,7 +98,6 @@ public class SecurityConfiguration {
             formLogin.passwordParameter("password");
 
             formLogin.failureHandler(authFailtureHandler);
-
         });
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
