@@ -84,18 +84,29 @@ public class PageController {
      * @return the view name to redirect to
      */
     @PostMapping("/do-register")
-    public String processRegister(@Valid @ModelAttribute UserForm userForm, BindingResult rBindingResult,
-            HttpSession session) {
-
-        if (rBindingResult.hasErrors()) {
+    public String processRegister(@Valid @ModelAttribute UserForm userForm, BindingResult bindingResult,
+            HttpSession session, Model model) {
+        if (bindingResult.hasErrors()) {
+            // Retain the existing user data and return to the register page
+            model.addAttribute("userForm", userForm);
             return "register";
         }
+
         User user = userService.convertUserFormToUser(userForm);
-        userService.saveUser(user);
+        User savedUser = userService.saveUser(user);
+
+        if (savedUser == null) {
+            // Set an error message in the session if the email already exists
+            Message message = Message.builder().content("Email already in use").type(MessageType.red).build();
+            session.setAttribute("message", message);
+            // Retain the existing user data
+            model.addAttribute("userForm", userForm);
+            return "register";
+        }
 
         Message message = Message.builder().content("Registration Successful").type(MessageType.green).build();
         session.setAttribute("message", message);
-
         return "redirect:/register";
     }
+
 }

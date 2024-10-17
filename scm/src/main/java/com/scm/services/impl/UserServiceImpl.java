@@ -34,6 +34,16 @@ public class UserServiceImpl implements UserService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * Converts a UserForm object to a User entity.
+     * 
+     * This method creates a new User object and populates its fields with the data
+     * from the provided UserForm. The user's enabled status is set to false and a
+     * default profile picture URL is assigned.
+     *
+     * @param userForm the UserForm object containing user details for conversion
+     * @return a User entity populated with data from the UserForm
+     */
     @Override
     public User convertUserFormToUser(UserForm userForm) {
         User user = new User();
@@ -48,69 +58,129 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    /**
+     * Saves a new user to the repository with encoded password and email
+     * verification token.
+     * 
+     * This method performs the following tasks:
+     * 1. Generates a unique user ID and sets it to the user.
+     * 2. Encodes the user's password and sets it.
+     * 3. Sets the user's roles.
+     * 4. Generates an email verification token and sets it to the user.
+     * 5. Saves the user to the repository.
+     * 6. Sends a verification email to the user with a link to verify their
+     * account.
+     * 
+     * @param user the User object to be saved
+     * @return the saved User object
+     */
     @Override
     public User saveUser(User user) {
-        // user id : have to generate
+        // Check if the email already exists
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            // Instead of throwing an exception, return null or use a custom response
+            return null;
+        }
+
         String userId = UUID.randomUUID().toString();
         user.setUserId(userId);
-        // password encode
-        // user.setPassword(userId);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        // set the user role
-
         user.setRoleList(List.of(ScmAppConstants.ROLE_USER));
-
-        logger.info(user.getProvider().toString());
         String emailToken = UUID.randomUUID().toString();
         user.setEmailToken(emailToken);
         User savedUser = userRepository.save(user);
         String emailLink = Helper.getLinkForEmailVerificatiton(emailToken);
-        emailService.sendEmail(savedUser.getEmail(), "Verify Account : Smart  Contact Manager", emailLink);
+        emailService.sendEmail(savedUser.getEmail(), "Verify Account: Smart Contact Manager", emailLink);
         return savedUser;
-
     }
 
+    /**
+     * Retrieves a user by their user ID.
+     * 
+     * This method searches the user repository for a user with the specified ID.
+     * If a user is found, it is returned wrapped in an Optional; otherwise, an
+     * empty Optional is returned.
+     *
+     * @param id the ID of the user to be retrieved
+     * @return an Optional containing the User if found, or an empty Optional if not
+     *         found
+     */
     @Override
     public Optional<User> getUserByUserId(String id) {
         return userRepository.getUserById(id);
     }
 
+    /**
+     * Updates an existing user with new information.
+     * 
+     * This method performs the following tasks:
+     * 1. Retrieves the existing user by their user ID.
+     * 2. Updates the old user's fields with the new information provided in the
+     * user parameter.
+     * 3. Saves the updated user back to the repository.
+     * 4. Returns an Optional containing the saved User object.
+     *
+     * @param user the User object containing updated information
+     * @return an Optional containing the updated User object, or empty if not found
+     * @throws ResourceNotFoundException if the user with the specified ID is not
+     *                                   found
+     */
     @Override
     public Optional<User> updateUser(User user) {
 
-        User user2 = userRepository.findById(user.getUserId())
+        User oldUser = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        // update karenge user2 from user
-        user2.setName(user.getName());
-        user2.setEmail(user.getEmail());
-        user2.setPassword(user.getPassword());
-        user2.setAbout(user.getAbout());
-        user2.setPhoneNumber(user.getPhoneNumber());
-        user2.setProfilePic(user.getProfilePic());
-        user2.setEnabled(user.isEnabled());
-        user2.setEmailVerified(user.isEmailVerified());
-        user2.setPhoneVerified(user.isPhoneVerified());
-        user2.setProvider(user.getProvider());
-        user2.setProviderUserId(user.getProviderUserId());
+
+        // update karenge oldUser from user
+        oldUser.setName(user.getName());
+        oldUser.setEmail(user.getEmail());
+        oldUser.setPassword(user.getPassword());
+        oldUser.setAbout(user.getAbout());
+        oldUser.setPhoneNumber(user.getPhoneNumber());
+        oldUser.setProfilePic(user.getProfilePic());
+        oldUser.setEnabled(user.isEnabled());
+        oldUser.setEmailVerified(user.isEmailVerified());
+        oldUser.setPhoneVerified(user.isPhoneVerified());
+        oldUser.setProvider(user.getProvider());
+        oldUser.setProviderUserId(user.getProviderUserId());
+
         // save the user in database
-        User save = userRepository.save(user2);
+        User save = userRepository.save(oldUser);
         return Optional.ofNullable(save);
 
     }
 
+    /**
+     * Deletes a user by their user ID.
+     * 
+     * This method retrieves a user from the repository using their ID.
+     * If the user is found, they are deleted from the repository.
+     * If the user is not found, a ResourceNotFoundException is thrown.
+     *
+     * @param id the ID of the user to be deleted
+     * @throws ResourceNotFoundException if no user is found with the given ID
+     */
     @Override
     public void deleteUserByUserId(String id) {
-        User user2 = userRepository.findById(id)
+        User oldUser = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        userRepository.delete(user2);
+        userRepository.delete(oldUser);
 
     }
 
+    /**
+     * Checks if a user exists by their user ID.
+     * 
+     * This method searches the user repository for a user with the specified ID.
+     * If a user is found, it returns true; otherwise, it returns false.
+     *
+     * @param userId the ID of the user to check for existence
+     * @return true if the user exists, false otherwise
+     */
     @Override
     public boolean isUserExistByUserId(String userId) {
-        User user2 = userRepository.findById(userId).orElse(null);
-        return user2 != null ? true : false;
+        User oldUser = userRepository.findById(userId).orElse(null);
+        return oldUser != null ? true : false;
     }
 
     @Override
