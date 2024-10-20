@@ -1,6 +1,8 @@
 /src/main/resources/application.properties
 /src/main/resources/application.yml
 
+/logs/scm_logs.log
+/logs/scm_logs.log.2024-10-19.0.gz
 
 HELP.md
 target/

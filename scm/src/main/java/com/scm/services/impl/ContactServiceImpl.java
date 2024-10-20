@@ -41,11 +41,6 @@ public class ContactServiceImpl implements ContactService {
      * @return The saved contact object with the generated ID.
      */
     @Override
-    // public Contact saveContact(Contact contact) {
-    // String contactId = UUID.randomUUID().toString();
-    // contact.setId(contactId);
-    // return contactRepository.save(contact);
-    // }
     public Contact saveContact(Contact contact) {
         String contactId = UUID.randomUUID().toString();
         contact.setId(contactId);
@@ -71,34 +66,6 @@ public class ContactServiceImpl implements ContactService {
      * @param username    the email of the logged-in user
      */
     @Override
-    // public void processAndSaveContact(ContactForm contactForm, String username) {
-    // // Get user by email
-    // User user = userService.getUserByUserEmail(username);
-
-    // // Convert form data to Contact object
-    // Contact contact = new Contact();
-    // contact.setName(contactForm.getName());
-    // contact.setFavorite(contactForm.isFavorite());
-    // contact.setEmail(contactForm.getEmail());
-    // contact.setPhoneNumber(contactForm.getPhoneNumber());
-    // contact.setAddress(contactForm.getAddress());
-    // contact.setDescription(contactForm.getDescription());
-    // contact.setUser(user);
-    // contact.setLinkedInLink(contactForm.getLinkedInLink());
-    // contact.setWebsiteLink(contactForm.getWebsiteLink());
-
-    // // Process contact image
-    // if (contactForm.getContactImage() != null &&
-    // !contactForm.getContactImage().isEmpty()) {
-    // String filename = UUID.randomUUID().toString();
-    // String fileURL = imageService.uploadImage(contactForm.getContactImage(),
-    // filename);
-    // contact.setPicture(fileURL);
-    // contact.setCloudinaryImagePublicId(filename);
-    // }
-
-    // saveContact(contact);
-    // }
     public void processAndSaveContact(ContactForm contactForm, String username) {
         // Get user by email
         User user = userService.getUserByUserEmail(username);
@@ -147,23 +114,6 @@ public class ContactServiceImpl implements ContactService {
      *                                   found
      */
     @Override
-    // public Contact updateContact(Contact contact) {
-
-    // var contactOld = contactRepository.findById(contact.getId())
-    // .orElseThrow(() -> new ResourceNotFoundException("Contact not found"));
-    // contactOld.setName(contact.getName());
-    // contactOld.setEmail(contact.getEmail());
-    // contactOld.setPhoneNumber(contact.getPhoneNumber());
-    // contactOld.setAddress(contact.getAddress());
-    // contactOld.setDescription(contact.getDescription());
-    // contactOld.setPicture(contact.getPicture());
-    // contactOld.setFavorite(contact.isFavorite());
-    // contactOld.setWebsiteLink(contact.getWebsiteLink());
-    // contactOld.setLinkedInLink(contact.getLinkedInLink());
-    // contactOld.setCloudinaryImagePublicId(contact.getCloudinaryImagePublicId());
-
-    // return contactRepository.save(contactOld);
-    // }
     public Contact updateContact(Contact contact) {
         logger.info("Updating contact with ID: {}", contact.getId());
 
@@ -359,22 +309,6 @@ public class ContactServiceImpl implements ContactService {
      * @return a ContactForm object containing the contact's details
      */
     @Override
-    // public ContactForm prepareContactForm(String contactId) {
-    // var contact = getContactById(contactId);
-
-    // ContactForm contactForm = new ContactForm();
-    // contactForm.setName(contact.getName());
-    // contactForm.setEmail(contact.getEmail());
-    // contactForm.setPhoneNumber(contact.getPhoneNumber());
-    // contactForm.setAddress(contact.getAddress());
-    // contactForm.setDescription(contact.getDescription());
-    // contactForm.setFavorite(contact.isFavorite());
-    // contactForm.setWebsiteLink(contact.getWebsiteLink());
-    // contactForm.setLinkedInLink(contact.getLinkedInLink());
-    // contactForm.setPicture(contact.getPicture());
-
-    // return contactForm;
-    // }
     public ContactForm prepareContactForm(String contactId) {
         logger.info("Preparing contact form for contact ID: {}", contactId);
 
@@ -412,35 +346,6 @@ public class ContactServiceImpl implements ContactService {
      * @param contactForm the form containing updated contact details
      */
     @Override
-    // public void updateContactFromForm(String contactId, ContactForm contactForm)
-    // {
-    // // Get existing contact
-    // var contact = getContactById(contactId);
-    // contact.setName(contactForm.getName());
-    // contact.setEmail(contactForm.getEmail());
-    // contact.setPhoneNumber(contactForm.getPhoneNumber());
-    // contact.setAddress(contactForm.getAddress());
-    // contact.setDescription(contactForm.getDescription());
-    // contact.setFavorite(contactForm.isFavorite());
-    // contact.setWebsiteLink(contactForm.getWebsiteLink());
-    // contact.setLinkedInLink(contactForm.getLinkedInLink());
-
-    // // Process image
-    // if (contactForm.getContactImage() != null &&
-    // !contactForm.getContactImage().isEmpty()) {
-    // logger.info("file is not empty");
-    // String fileName = UUID.randomUUID().toString();
-    // String imageUrl = imageService.uploadImage(contactForm.getContactImage(),
-    // fileName);
-    // contact.setCloudinaryImagePublicId(fileName);
-    // contact.setPicture(imageUrl);
-    // } else {
-    // logger.info("file is empty");
-    // }
-
-    // updateContact(contact);
-    // }
-
     public void updateContactFromForm(String contactId, ContactForm contactForm) {
         logger.info("Updating contact for contact ID: {}", contactId);
 

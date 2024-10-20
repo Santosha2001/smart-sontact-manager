@@ -1,7 +1,5 @@
 package com.scm.controllers;
 
-import java.util.UUID;
-
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,7 +20,6 @@ import com.scm.entities.User;
 import com.scm.forms.ContactForm;
 import com.scm.forms.ContactSearchForm;
 import com.scm.services.ContactService;
-import com.scm.services.ImageService;
 import com.scm.services.UserService;
 import com.scm.utils.Helper;
 import com.scm.utils.Message;
@@ -36,13 +33,10 @@ import jakarta.validation.Valid;
 @RequestMapping("/user/contacts")
 public class ContactController {
 
-    private Logger logger = org.slf4j.LoggerFactory.getLogger(ContactController.class);
+    private static final Logger logger = org.slf4j.LoggerFactory.getLogger(ContactController.class);
 
     @Autowired
     private ContactService contactService;
-
-    @Autowired
-    private ImageService imageService;
 
     @Autowired
     private UserService userService;
