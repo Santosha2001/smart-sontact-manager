@@ -3,22 +3,101 @@
 
 <head>
     <title>SCM | Contact Us</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
-    <div id="content">
-        <h1>Welcome to Contact page</h1>
-        <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur,
-            ratione!
-        </p>
+    <div id="content" class="border">
+
+        <!-- Banner Section -->
+        <section class="bg-blue-600 text-white py-20">
+            <div class="container mx-auto text-center">
+                <h2 class="text-4xl font-bold mb-4">Get in Touch with Us</h2>
+                <p class="text-lg mb-8">Have any questions? Feel free to reach out to us and we’ll get back to you as
+                    soon as possible!</p>
+            </div>
+        </section>
+
+        <!-- Contact Form Section -->
+        <section class="py-20 bg-white dark:bg-gray-800">
+            <div class="container mx-auto text-center">
+                <h2 class="text-3xl font-bold mb-12 dark:text-white">Contact Us</h2>
+                <form class="max-w-lg mx-auto text-left">
+                    <div class="mb-4">
+                        <label for="name" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Your
+                            Name</label>
+                        <input type="text" id="name" name="name" placeholder="Enter your name"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="email" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Your
+                            Email</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="message" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Your
+                            Message</label>
+                        <textarea id="message" name="message" rows="5" placeholder="Type your message here"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required></textarea>
+                    </div>
+
+                    <button type="submit"
+                        class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Contact Information Section -->
+        <section class="py-20 bg-gray-100 dark:bg-gray-700">
+            <div class="container mx-auto text-center">
+                <h2 class="text-3xl font-bold mb-12 dark:text-white">Our Contact Information</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="p-6 bg-white dark:bg-gray-600 rounded shadow">
+                        <i class="fa fa-phone text-blue-600 text-4xl mb-4 dark:text-blue-400"></i>
+                        <h3 class="text-xl font-semibold dark:text-white">Phone</h3>
+                        <p class="text-gray-600 dark:text-gray-300">+91 702 059 0204</p>
+                    </div>
+                    <div class="p-6 bg-white dark:bg-gray-600 rounded shadow">
+                        <i class="fa fa-envelope text-blue-600 text-4xl mb-4 dark:text-blue-400"></i>
+                        <h3 class="text-xl font-semibold dark:text-white">Email</h3>
+                        <p class="text-gray-600 dark:text-gray-300">santosha.xworkz@gmail.com</p>
+                    </div>
+                    <div class="p-6 bg-white dark:bg-gray-600 rounded shadow">
+                        <i class="fa fa-map-marker text-blue-600 text-4xl mb-4 dark:text-blue-400"></i>
+                        <h3 class="text-xl font-semibold dark:text-white">Address</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Basham Circle Rajajinagar, </p>
+                        <p class="text-gray-600 dark:text-gray-300">Bangalore, India</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action Section -->
+        <section class="bg-blue-600 text-white py-20">
+            <div class="container mx-auto text-center">
+                <h2 class="text-3xl font-bold mb-4">We’re Here to Help!</h2>
+                <p class="text-lg mb-8">Don’t hesitate to contact us with your questions or feedback.</p>
+                <a data-th-href="@{/register}"
+                    class="bg-white text-blue-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition duration-300">Create
+                    an Account</a>
+            </div>
+        </section>
 
         <!-- footer -->
         <div data-th-replace="~{footer::footer}"></div>
+
     </div>
 
     <script>
-        console.log("Home page");
+        console.log("Contact page");
     </script>
 
 </body>

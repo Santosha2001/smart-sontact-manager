@@ -38,3 +38,24 @@
     cursor: not-allowed;
   }
 }
+
+.icon-link {
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.icon-link i {
+  margin-right: 8px;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.icon-link:hover {
+  color: #ffeb3b;
+  /* Changes text and icon color */
+}
+
+.icon-link:hover i {
+  transform: scale(1.2);
+  /* Scales the icon */
+}

@@ -3,22 +3,103 @@
 
 <head>
     <title>SCM | Services</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
-    <div id="content">
-        <h1>Welcome to services page</h1>
-        <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur,
-            ratione!
-        </p>
+    <div id="content" class="border">
+
+        <!-- Banner Section -->
+        <section class="bg-blue-600 text-white py-20">
+            <div class="container mx-auto text-center">
+                <h2 class="text-4xl font-bold mb-4">Our Services</h2>
+                <p class="text-lg mb-8">Explore the wide range of services that Smart Contact Manager offers to make
+                    managing your contacts easy and secure.</p>
+                <a data-th-href="@{/login}"
+                    class="bg-white text-blue-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-300 transition duration-300">Get
+                    Started</a>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="py-20 bg-white dark:bg-gray-800">
+            <div class="container mx-auto text-center">
+                <h2 class="text-3xl font-bold mb-12 dark:text-white">Our Core Services</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div
+                        class="p-6 bg-gray-100 dark:bg-gray-700 rounded shadow hover:shadow-lg transition duration-300 transform hover:scale-105">
+                        <i class="fas fa-address-book text-blue-600 text-4xl mb-4 dark:text-blue-400"></i>
+                        <h3 class="text-xl font-semibold dark:text-white">Contact Management</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Store, organize, and manage all your contacts in one
+                            convenient platform.</p>
+                    </div>
+                    <div
+                        class="p-6 bg-gray-100 dark:bg-gray-700 rounded shadow hover:shadow-lg transition duration-300 transform hover:scale-105">
+                        <i class="fas fa-lock text-blue-600 text-4xl mb-4 dark:text-blue-400"></i>
+                        <h3 class="text-xl font-semibold dark:text-white">Secure Data Storage</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Your contact data is encrypted and stored securely,
+                            ensuring complete privacy.</p>
+                    </div>
+                    <div
+                        class="p-6 bg-gray-100 dark:bg-gray-700 rounded shadow hover:shadow-lg transition duration-300 transform hover:scale-105">
+                        <i class="fas fa-cogs text-blue-600 text-4xl mb-4 dark:text-blue-400"></i>
+                        <h3 class="text-xl font-semibold dark:text-white">Customizable Solutions</h3>
+                        <p class="text-gray-600 dark:text-gray-300">We offer tailored solutions for businesses and
+                            individual users, depending on your needs.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Additional Services Section -->
+        <section class="py-20 bg-gray-100 dark:bg-gray-700">
+            <div class="container mx-auto text-center">
+                <h2 class="text-3xl font-bold mb-12 dark:text-white">Additional Services</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div
+                        class="p-6 bg-white dark:bg-gray-600 rounded shadow hover:shadow-lg transition duration-300 transform hover:scale-105">
+                        <i class="fas fa-mobile-alt text-blue-600 text-4xl mb-4 dark:text-blue-400"></i>
+                        <h3 class="text-xl font-semibold dark:text-white">Mobile Access</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Access your contacts from any device, anywhere, with
+                            our mobile-friendly platform.</p>
+                    </div>
+                    <div
+                        class="p-6 bg-white dark:bg-gray-600 rounded shadow hover:shadow-lg transition duration-300 transform hover:scale-105">
+                        <i class="fas fa-users text-blue-600 text-4xl mb-4 dark:text-blue-400"></i>
+                        <h3 class="text-xl font-semibold dark:text-white">Team Collaboration</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Collaborate with your team by sharing contacts and
+                            managing business relationships efficiently.</p>
+                    </div>
+                    <div
+                        class="p-6 bg-white dark:bg-gray-600 rounded shadow hover:shadow-lg transition duration-300 transform hover:scale-105">
+                        <i class="fas fa-life-ring text-blue-600 text-4xl mb-4 dark:text-blue-400"></i>
+                        <h3 class="text-xl font-semibold dark:text-white">24/7 Support</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Our customer support team is available 24/7 to
+                            assist you with any queries or issues.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action Section -->
+        <section class="bg-blue-600 text-white py-20">
+            <div class="container mx-auto text-center">
+                <h2 class="text-3xl font-bold mb-4">Ready to Get Started?</h2>
+                <p class="text-lg mb-8">Sign up today and take advantage of all the services Smart Contact Manager has
+                    to offer.</p>
+                <a data-th-href="@{/register}"
+                    class="bg-white text-blue-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition duration-300">Create
+                    an Account</a>
+            </div>
+        </section>
 
         <!-- footer -->
         <div data-th-replace="~{footer::footer}"></div>
+
     </div>
 
     <script>
-        console.log("services page");
+        console.log("Services page");
     </script>
 
 </body>

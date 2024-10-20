@@ -3,22 +3,113 @@
 
 <head>
     <title>SCM | About Us</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
-    <div id="content">
-        <h1>Welcome to about page</h1>
-        <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur,
-            ratione!
-        </p>
+    <div id="content" class="border">
+
+        <!-- Banner Section -->
+        <section class="bg-blue-600 text-white py-20">
+            <div class="container mx-auto text-center">
+                <h2 class="text-4xl font-bold mb-4">About Smart Contact Manager</h2>
+                <p class="text-lg mb-8">Learn more about our mission, vision, and what drives us to provide you with the
+                    best contact management experience.</p>
+                <a data-th-href="@{/login}"
+                    class="bg-white text-blue-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-300 transition duration-300">Get
+                    Started</a>
+            </div>
+        </section>
+
+        <!-- Our Mission Section -->
+        <section class="py-20 bg-white dark:bg-gray-800">
+            <div class="container mx-auto text-center">
+                <h2 class="text-3xl font-bold mb-12 dark:text-white">Our Mission</h2>
+                <p class="text-lg mb-8 text-gray-600 dark:text-gray-300">At Smart Contact Manager, our mission is to
+                    provide a seamless and secure way for individuals and businesses to manage their contacts. We are
+                    dedicated to building a platform that is both user-friendly and powerful, catering to all your
+                    contact management needs.</p>
+            </div>
+        </section>
+
+        <!-- Our Team Section -->
+        <!-- <section class="py-20 bg-gray-100 dark:bg-gray-700">
+            <div class="container mx-auto text-center">
+                <h2 class="text-3xl font-bold mb-12 dark:text-white">Meet Our Team</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div
+                        class="p-6 bg-white dark:bg-gray-600 rounded shadow hover:shadow-lg transition duration-300 transform hover:scale-105">
+                        <img src="https://via.placeholder.com/150" alt="CEO"
+                            class="w-24 h-24 mx-auto rounded-full mb-4">
+                        <h3 class="text-xl font-semibold dark:text-white">John Doe</h3>
+                        <p class="text-gray-600 dark:text-gray-300">CEO & Founder</p>
+                    </div>
+                    <div
+                        class="p-6 bg-white dark:bg-gray-600 rounded shadow hover:shadow-lg transition duration-300 transform hover:scale-105">
+                        <img src="https://via.placeholder.com/150" alt="CTO"
+                            class="w-24 h-24 mx-auto rounded-full mb-4">
+                        <h3 class="text-xl font-semibold dark:text-white">Jane Smith</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Chief Technology Officer</p>
+                    </div>
+                    <div
+                        class="p-6 bg-white dark:bg-gray-600 rounded shadow hover:shadow-lg transition duration-300 transform hover:scale-105">
+                        <img src="https://via.placeholder.com/150" alt="COO"
+                            class="w-24 h-24 mx-auto rounded-full mb-4">
+                        <h3 class="text-xl font-semibold dark:text-white">Michael Lee</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Chief Operations Officer</p>
+                    </div>
+                </div>
+            </div>
+        </section> -->
+
+        <!-- Our Values Section -->
+        <section class="py-10 bg-white dark:bg-gray-800">
+            <div class="container mx-auto text-center">
+                <h2 class="text-3xl font-bold mb-12 dark:text-white">Our Values</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div
+                        class="p-6 bg-gray-100 dark:bg-gray-700 rounded shadow hover:shadow-lg transition duration-300 transform hover:scale-105">
+                        <i class="fas fa-shield-alt text-blue-600 text-4xl mb-4 dark:text-blue-400"></i>
+                        <h3 class="text-xl font-semibold dark:text-white">Security</h3>
+                        <p class="text-gray-600 dark:text-gray-300">We prioritize the safety of your data with
+                            industry-leading security measures.</p>
+                    </div>
+                    <div
+                        class="p-6 bg-gray-100 dark:bg-gray-700 rounded shadow hover:shadow-lg transition duration-300 transform hover:scale-105">
+                        <i class="fas fa-cogs text-blue-600 text-4xl mb-4 dark:text-blue-400"></i>
+                        <h3 class="text-xl font-semibold dark:text-white">Innovation</h3>
+                        <p class="text-gray-600 dark:text-gray-300">We constantly strive to improve and innovate our
+                            platform.</p>
+                    </div>
+                    <div
+                        class="p-6 bg-gray-100 dark:bg-gray-700 rounded shadow hover:shadow-lg transition duration-300 transform hover:scale-105">
+                        <i class="fas fa-heart text-blue-600 text-4xl mb-4 dark:text-blue-400"></i>
+                        <h3 class="text-xl font-semibold dark:text-white">User Focus</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Everything we do is focused on delivering the best
+                            experience for our users.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action Section -->
+        <section class="bg-blue-600 text-white py-20">
+            <div class="container mx-auto text-center">
+                <h2 class="text-3xl font-bold mb-4">Want to Know More?</h2>
+                <p class="text-lg mb-8">Contact us today to learn more about how Smart Contact Manager can help you.</p>
+                <a data-th-href="@{/contact}"
+                    class="bg-white text-blue-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition duration-300">Contact
+                    Us</a>
+            </div>
+        </section>
 
         <!-- footer -->
         <div data-th-replace="~{footer::footer}"></div>
+
     </div>
 
     <script>
-        console.log("about page");
+        console.log("About page");
     </script>
 
 </body>
