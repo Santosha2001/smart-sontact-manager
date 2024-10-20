@@ -1,5 +1,7 @@
 /src/main/resources/application.properties
 /src/main/resources/application.yml
+/src/main/resources/application-dev.properties
+/src/main/resources/application-pro.properties
 
 /logs/scm_logs.log
 /logs/scm_logs.log.2024-10-19.0.gz
