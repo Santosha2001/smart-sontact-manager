@@ -1,5 +1,7 @@
 package com.scm.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,6 +12,8 @@ import com.scm.repositories.UserRepository;
 
 @Service
 public class CustomUserDetailsServiceImpl implements UserDetailsService {
+
+    private Logger logger = LoggerFactory.getLogger(CustomUserDetailsServiceImpl.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -30,10 +34,13 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // apne user ko load karana hai
-        return userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with email : " + username));
+        logger.info("Attempting to load user by email: {}", username);
 
+        return userRepository.findByEmail(username)
+                .orElseThrow(() -> {
+                    logger.error("User not found with email: {}", username);
+                    return new UsernameNotFoundException("User not found with email: " + username);
+                });
     }
 
 }

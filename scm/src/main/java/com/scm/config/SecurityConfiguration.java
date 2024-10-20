@@ -20,7 +20,7 @@ public class SecurityConfiguration {
     private OAuthAuthenicationSuccessHandler handler;
 
     @Autowired
-    private AuthFailtureHandler authFailtureHandler;
+    private AuthFailureHandler authFailtureHandler;
 
     /**
      * Configures and returns a PasswordEncoder bean.

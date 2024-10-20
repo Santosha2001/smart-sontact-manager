@@ -7,14 +7,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/user")
 public class UserController {
 
-    // user dashbaord router
     @RequestMapping(value = "/dashboard")
     public String userDashboard() {
-        System.out.println("User dashboard");
         return "user/dashboard";
     }
 
-    // user profile router
     @RequestMapping(value = "/profile")
     public String userProfile() {
 

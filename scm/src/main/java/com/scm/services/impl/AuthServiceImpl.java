@@ -1,5 +1,7 @@
 package com.scm.services.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,8 @@ import jakarta.servlet.http.HttpSession;
 
 @Service
 public class AuthServiceImpl implements AuthService {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
 
     @Autowired
     private UserRepository userRepo;
@@ -39,12 +43,19 @@ public class AuthServiceImpl implements AuthService {
                 user.setEmailVerified(true);
                 user.setEnabled(true);
                 userRepo.save(user);
+
+                // Log success message
+                logger.info("Email verified for user: {}", user.getEmail());
+
                 session.setAttribute("message", Message.builder()
                         .type(MessageType.green)
-                        .content("Your email is verified. Now you can login.")
+                        .content("Your email is verified. Now you can log in.")
                         .build());
                 return true;
             }
+
+            // Log failure message for token mismatch
+            logger.warn("Email not verified! Token is not associated with user: {}", user.getEmail());
             session.setAttribute("message", Message.builder()
                     .type(MessageType.red)
                     .content("Email not verified! Token is not associated with user.")
@@ -52,10 +63,13 @@ public class AuthServiceImpl implements AuthService {
             return false;
         }
 
+        // Log failure message for user not found
+        logger.warn("Email not verified! No user found with the provided token: {}", token);
         session.setAttribute("message", Message.builder()
                 .type(MessageType.red)
                 .content("Email not verified! Token is not associated with user.")
                 .build());
         return false;
     }
+
 }

@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private EmailService emailService;
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     /**
      * Converts a UserForm object to a User entity.
@@ -46,6 +46,8 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User convertUserFormToUser(UserForm userForm) {
+        logger.info("Converting UserForm to User for email: {}", userForm.getEmail());
+
         User user = new User();
         user.setName(userForm.getName());
         user.setEmail(userForm.getEmail());
@@ -55,6 +57,8 @@ public class UserServiceImpl implements UserService {
         user.setEnabled(false);
         user.setProfilePic(
                 "https://png.pngtree.com/element_our/20200610/ourmid/pngtree-character-default-avatar-image_2237203.jpg");
+
+        logger.info("User conversion successful: {}", user);
         return user;
     }
 
@@ -76,21 +80,30 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User saveUser(User user) {
+        logger.info("Attempting to save user with email: {}", user.getEmail());
+
         // Check if the email already exists
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            // Instead of throwing an exception, return null or use a custom response
-            return null;
+            logger.warn("Email already exists: {}", user.getEmail());
+            return null; // or throw a custom exception if needed
         }
 
         String userId = UUID.randomUUID().toString();
         user.setUserId(userId);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoleList(List.of(ScmAppConstants.ROLE_USER));
+
         String emailToken = UUID.randomUUID().toString();
         user.setEmailToken(emailToken);
+
         User savedUser = userRepository.save(user);
         String emailLink = Helper.getLinkForEmailVerificatiton(emailToken);
+
+        // Log the sending of the email verification
+        logger.info("Sending verification email to: {}", savedUser.getEmail());
         emailService.sendEmail(savedUser.getEmail(), "Verify Account: Smart Contact Manager", emailLink);
+
+        logger.info("User saved successfully with ID: {}", savedUser.getUserId());
         return savedUser;
     }
 
@@ -107,7 +120,17 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public Optional<User> getUserByUserId(String id) {
-        return userRepository.getUserById(id);
+        logger.info("Fetching user with ID: {}", id);
+
+        Optional<User> userOptional = userRepository.getUserById(id);
+
+        if (userOptional.isPresent()) {
+            logger.info("User found: {}", userOptional.get().getEmail());
+        } else {
+            logger.warn("User not found with ID: {}", id);
+        }
+
+        return userOptional;
     }
 
     /**
@@ -127,11 +150,15 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public Optional<User> updateUser(User user) {
+        logger.info("Attempting to update user with ID: {}", user.getUserId());
 
         User oldUser = userRepository.findById(user.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> {
+                    logger.error("User not found with ID: {}", user.getUserId());
+                    return new ResourceNotFoundException("User not found");
+                });
 
-        // update karenge oldUser from user
+        // Update oldUser with values from user
         oldUser.setName(user.getName());
         oldUser.setEmail(user.getEmail());
         oldUser.setPassword(user.getPassword());
@@ -144,10 +171,11 @@ public class UserServiceImpl implements UserService {
         oldUser.setProvider(user.getProvider());
         oldUser.setProviderUserId(user.getProviderUserId());
 
-        // save the user in database
-        User save = userRepository.save(oldUser);
-        return Optional.ofNullable(save);
+        // Save the user in the database
+        User savedUser = userRepository.save(oldUser);
+        logger.info("User updated successfully: {}", savedUser.getEmail());
 
+        return Optional.ofNullable(savedUser);
     }
 
     /**
@@ -162,10 +190,16 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void deleteUserByUserId(String id) {
-        User oldUser = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        userRepository.delete(oldUser);
+        logger.info("Attempting to delete user with ID: {}", id);
 
+        User oldUser = userRepository.findById(id)
+                .orElseThrow(() -> {
+                    logger.error("User not found with ID: {}", id);
+                    return new ResourceNotFoundException("User not found");
+                });
+
+        userRepository.delete(oldUser);
+        logger.info("User deleted successfully: {}", oldUser.getEmail());
     }
 
     /**
@@ -179,14 +213,30 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public boolean isUserExistByUserId(String userId) {
-        User oldUser = userRepository.findById(userId).orElse(null);
-        return oldUser != null ? true : false;
+        logger.info("Checking existence of user with ID: {}", userId);
+
+        boolean exists = userRepository.findById(userId).isPresent();
+        if (exists) {
+            logger.info("User exists with ID: {}", userId);
+        } else {
+            logger.warn("No user found with ID: {}", userId);
+        }
+
+        return exists;
     }
 
     @Override
     public boolean isUserExistByUserEmail(String email) {
-        User user = userRepository.findByEmail(email).orElse(null);
-        return user != null ? true : false;
+        logger.info("Checking existence of user with email: {}", email);
+
+        boolean exists = userRepository.findByEmail(email).isPresent();
+        if (exists) {
+            logger.info("User exists with email: {}", email);
+        } else {
+            logger.warn("No user found with email: {}", email);
+        }
+
+        return exists;
     }
 
     @Override
@@ -196,8 +246,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByUserEmail(String email) {
-        return userRepository.findByEmail(email).orElse(null);
+        logger.info("Fetching user by email: {}", email);
 
+        return userRepository.findByEmail(email).map(user -> {
+            logger.info("User found: {}", user.getEmail());
+            return user;
+        }).orElseGet(() -> {
+            logger.warn("No user found with email: {}", email);
+            return null;
+        });
     }
 
 }

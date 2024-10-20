@@ -2,6 +2,8 @@ package com.scm.config;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -16,7 +18,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @Component
-public class AuthFailtureHandler implements AuthenticationFailureHandler {
+public class AuthFailureHandler implements AuthenticationFailureHandler {
+
+    private Logger logger = LoggerFactory.getLogger(AuthFailureHandler.class);
 
     /**
      * Handles authentication failure events.
@@ -36,20 +40,21 @@ public class AuthFailtureHandler implements AuthenticationFailureHandler {
             AuthenticationException exception) throws IOException, ServletException {
 
         if (exception instanceof DisabledException) {
+            // Log the event when a disabled user attempts to log in
+            logger.warn("User attempted to log in while disabled: {}", request.getParameter("email"));
 
-            // user is disabled
+            // User is disabled
             HttpSession session = request.getSession();
-            session.setAttribute("message",
-                    Message.builder()
-                            .content("User is disabled, Email with  varification link is sent on your email id !!")
-                            .type(MessageType.red).build());
+            session.setAttribute("message", Message.builder()
+                    .content("User is disabled, Email with verification link is sent on your email id !!")
+                    .type(MessageType.red).build());
 
             response.sendRedirect("/login");
         } else {
+            // Log general authentication failure
+            logger.error("Authentication failed: {}", exception.getMessage());
             response.sendRedirect("/login?error=true");
-            // request.getRequestDispatcher("/login").forward(request, response);
-
         }
-
     }
+
 }

@@ -26,7 +26,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class OAuthAuthenicationSuccessHandler implements AuthenticationSuccessHandler {
 
-    Logger logger = LoggerFactory.getLogger(OAuthAuthenicationSuccessHandler.class);
+    private Logger logger = LoggerFactory.getLogger(OAuthAuthenicationSuccessHandler.class);
 
     @Autowired
     private UserRepository userRepo;
@@ -54,17 +54,16 @@ public class OAuthAuthenicationSuccessHandler implements AuthenticationSuccessHa
             HttpServletResponse response,
             Authentication authentication) throws IOException, ServletException {
 
-        logger.info("OAuthAuthenicationSuccessHandler");
+        logger.info("OAuthAuthenticationSuccessHandler");
 
-        // identify the provider
-        var oauth2AuthenicationToken = (OAuth2AuthenticationToken) authentication;
-        String authorizedClientRegistrationId = oauth2AuthenicationToken.getAuthorizedClientRegistrationId();
-
-        logger.info(authorizedClientRegistrationId);
+        // Identify the provider
+        var oauth2AuthenticationToken = (OAuth2AuthenticationToken) authentication;
+        String authorizedClientRegistrationId = oauth2AuthenticationToken.getAuthorizedClientRegistrationId();
+        logger.info("Authorized Client Registration ID: {}", authorizedClientRegistrationId);
 
         var oauthUser = (DefaultOAuth2User) authentication.getPrincipal();
         oauthUser.getAttributes().forEach((key, value) -> {
-            logger.info(key + " : " + value);
+            logger.info("{} : {}", key, value);
         });
 
         User user = new User();
@@ -74,50 +73,51 @@ public class OAuthAuthenicationSuccessHandler implements AuthenticationSuccessHa
         user.setEnabled(true);
         user.setPassword("dummy");
 
-        if (authorizedClientRegistrationId.equalsIgnoreCase("google")) {
+        // Set user attributes based on the provider
+        switch (authorizedClientRegistrationId.toLowerCase()) {
+            case "google":
+                user.setEmail(oauthUser.getAttribute("email").toString());
+                user.setProfilePic(oauthUser.getAttribute("picture").toString());
+                user.setName(oauthUser.getAttribute("name").toString());
+                user.setProviderUserId(oauthUser.getName());
+                user.setProvider(Providers.GOOGLE);
+                user.setAbout("This account is created using Google.");
+                break;
 
-            // google attributes
-            user.setEmail(oauthUser.getAttribute("email").toString());
-            user.setProfilePic(oauthUser.getAttribute("picture").toString());
-            user.setName(oauthUser.getAttribute("name").toString());
-            user.setProviderUserId(oauthUser.getName());
-            user.setProvider(Providers.GOOGLE);
-            user.setAbout("This account is created using google.");
+            case "github":
+                String email = oauthUser.getAttribute("email") != null ? oauthUser.getAttribute("email").toString()
+                        : oauthUser.getAttribute("login").toString() + "@gmail.com";
+                String picture = oauthUser.getAttribute("avatar_url").toString();
+                String name = oauthUser.getAttribute("login").toString();
+                String providerUserId = oauthUser.getName();
 
-        } else if (authorizedClientRegistrationId.equalsIgnoreCase("github")) {
+                user.setEmail(email);
+                user.setProfilePic(picture);
+                user.setName(name);
+                user.setProviderUserId(providerUserId);
+                user.setProvider(Providers.GITHUB);
+                user.setAbout("This account is created using GitHub.");
+                break;
 
-            // github attributes
-            String email = oauthUser.getAttribute("email") != null ? oauthUser.getAttribute("email").toString()
-                    : oauthUser.getAttribute("login").toString() + "@gmail.com";
-            String picture = oauthUser.getAttribute("avatar_url").toString();
-            String name = oauthUser.getAttribute("login").toString();
-            String providerUserId = oauthUser.getName();
+            case "linkedin":
+                // Handle LinkedIn user attributes here
+                break;
 
-            user.setEmail(email);
-            user.setProfilePic(picture);
-            user.setName(name);
-            user.setProviderUserId(providerUserId);
-            user.setProvider(Providers.GITHUB);
-
-            user.setAbout("This account is created using github");
+            default:
+                logger.warn("OAuthAuthenticationSuccessHandler: Unknown provider");
+                break;
         }
 
-        else if (authorizedClientRegistrationId.equalsIgnoreCase("linkedin")) {
-
-        }
-
-        else {
-            logger.info("OAuthAuthenicationSuccessHandler: Unknown provider");
-        }
-
-        User user2 = userRepo.findByEmail(user.getEmail()).orElse(null);
-        if (user2 == null) {
+        User existingUser = userRepo.findByEmail(user.getEmail()).orElse(null);
+        if (existingUser == null) {
             userRepo.save(user);
-            System.out.println("user saved:" + user.getEmail());
+            logger.info("User saved: {}", user.getEmail());
+        } else {
+            logger.info("User already exists: {}", user.getEmail());
         }
 
+        // Redirect to user profile
         new DefaultRedirectStrategy().sendRedirect(request, response, "/user/profile");
-
     }
 
 }

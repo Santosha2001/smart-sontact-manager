@@ -252,7 +252,7 @@ public class ContactController {
     @RequestMapping(value = "/update/{contactId}", method = RequestMethod.POST)
     public String updateContact(@PathVariable("contactId") String contactId,
             @Valid @ModelAttribute ContactForm contactForm,
-            BindingResult bindingResult,
+            BindingResult bindingResult, HttpSession session,
             Model model) {
 
         // Validate form data
@@ -261,7 +261,13 @@ public class ContactController {
         }
 
         contactService.updateContactFromForm(contactId, contactForm);
-        model.addAttribute("message", Message.builder().content("Contact Updated !!").type(MessageType.green).build());
+
+        logger.info("contactId {} updated", contactId);
+        session.setAttribute("message",
+                Message.builder()
+                        .content("Contact is Updated successfully !! ")
+                        .type(MessageType.green)
+                        .build());
 
         return "redirect:/user/contacts/view/" + contactId;
     }
